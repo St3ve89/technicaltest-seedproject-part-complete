@@ -15,7 +15,7 @@ class Store extends Observable {
   }
 
   filter() {
-    const { deals, productFilters } = this.state;
+    const { deals, productFilters, providerFilter } = this.state;
 
     deals.map((deal) => {
       deal.newProductTypes = deal.productTypes
@@ -36,14 +36,17 @@ class Store extends Observable {
       );
     };
 
-    const filteredDeals = deals.filter(({ newProductTypes }) => {
-      return (
-        productFilters.length >= 1 &&
-        listEquals(newProductTypes, productFilters)
-      );
+    const filteredDeals = deals.filter(({ newProductTypes, provider }) => {
+      return productFilters.length >= 1 && providerFilter
+        ? listEquals(newProductTypes, productFilters) &&
+            provider.id === providerFilter
+        : listEquals(newProductTypes, productFilters) ||
+            provider.id === providerFilter;
     });
 
-    return productFilters.length === 0 ? deals : filteredDeals;
+    return productFilters.length === 0 && !providerFilter
+      ? deals
+      : filteredDeals;
   }
 
   setDeals(data) {
