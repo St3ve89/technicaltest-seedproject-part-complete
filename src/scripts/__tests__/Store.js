@@ -3,6 +3,11 @@ import mockData from "../../../public/db.json";
 
 describe("filter", () => {
   let sut;
+  const BROADBAND = "Broadband";
+  const MOBILE = "Mobile";
+  const TV = "Tv";
+  const SKY_ID = 1;
+  const BT_ID = 3;
 
   beforeEach(() => {
     // Arrange
@@ -21,7 +26,7 @@ describe("filter", () => {
 
   it("should return 4 deals if filter by broadband", () => {
     // Arrange
-    sut.setProductFilter("broadband");
+    sut.setProductFilter(BROADBAND);
 
     // Act
     const result = sut.deals;
@@ -32,8 +37,8 @@ describe("filter", () => {
 
   it("should return 4 deals if filter by broadband and tv", () => {
     // Arrange
-    sut.setProductFilter("broadband");
-    sut.setProductFilter("tv");
+    sut.setProductFilter(BROADBAND);
+    sut.setProductFilter(TV);
 
     // Act
     const result = sut.deals;
@@ -44,8 +49,8 @@ describe("filter", () => {
 
   it("should return 1 deals if filter by broadband and mobile", () => {
     // Arrange
-    sut.setProductFilter("broadband");
-    sut.setProductFilter("mobile");
+    sut.setProductFilter(BROADBAND);
+    sut.setProductFilter(MOBILE);
 
     // Act
     const result = sut.deals;
@@ -56,9 +61,33 @@ describe("filter", () => {
 
   it("should return 2 deals if filter by broadband, tv and mobile", () => {
     // Arrange
-    sut.setProductFilter("broadband");
-    sut.setProductFilter("tv");
-    sut.setProductFilter("mobile");
+    sut.setProductFilter(BROADBAND);
+    sut.setProductFilter(TV);
+    sut.setProductFilter(MOBILE);
+
+    // Act
+    const result = sut.deals;
+
+    // Assert
+    expect(result).toHaveLength(2);
+  });
+
+  it("should return 1 deals if filter by Sky provider", () => {
+    // Arrange
+    sut.setProviderFilter(SKY_ID);
+
+    // Act
+    const result = sut.deals;
+
+    // Assert
+    expect(result).toHaveLength(1);
+  });
+
+  it("should return 2 deals if filter by BT, broadband and tv", () => {
+    // Arrange
+    sut.setProviderFilter(BT_ID);
+    sut.setProductFilter(BROADBAND);
+    sut.setProductFilter(TV);
 
     // Act
     const result = sut.deals;
